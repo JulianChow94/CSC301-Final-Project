@@ -1,0 +1,62 @@
+db.createCollection("tags",{ autoIndexID : 1})
+db.tags.insert({
+	name : "Vegan",
+	desc : "Why u no eat meat?",
+})
+
+db.createCollection("ingredients",{ autoIndexID : 1})
+db.ingredients.insert({
+	name : "Cheese",
+	desc : "Shotguns are cheese",
+	tags : [],
+	nutrition : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
+	alter : []
+})
+db.ingredients.insert({
+	name : "Macaroni",
+	desc : "Pasta(?)",
+	tags : [],
+	nutrition : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
+	alter : []
+})
+
+db.createCollection("meals",{ autoIndexID : 1})
+db.meals.insert({
+	name : "Mac & Cheese",
+	desc : "Cheese and macaroni",
+	ingredients : [ db.ingredients.findOne({"name":"Cheese"},{"_id":1}),
+					db.ingredients.findOne({"name":"Macaroni"},{"_id":1})],
+	tags : [db.tags.findOne({"name":"Vegan"},{"_id":1})],
+	instructions : "http://Somewebsite/recipes/macandcheese.html",
+	alter : []
+})
+
+db.createCollection("users",{ autoIndexID : 1})
+db.users.insert({
+	username : "admin",
+	password : "admin",
+	display : "IAMADMIN",
+	email : "something@somethingelse.com",
+	favourites : [ db.meals.findOne({"name":"Mac & Cheese"},{"_id":1}) ],
+	ingloves : [db.ingredients.findOne({"name":"Cheese"},{"_id":1}),
+				db.ingredients.findOne({"name":"Macaroni"},{"_id":1})],
+	inghates : [],
+	tags : []
+})
+
+--Some examples
+>Find a single user with display name "IAMADMIN":
+	db.users.findOne({"display":"IAMADMIN"})
+>Find all users (if there are multiple) with display name "IAMADMIN":
+	db.users.find({"display":"IAMADMIN"})
+>Return the tags of meal "Mac & Cheese":
+	db.males.findOne({"name" : "Mac & Cheese"}, {"tags":1})
+>Return favourite ingredients of user with display name "IAMADMIN" (using variables):
+	var ingridientIDs = db.users.findOne({"display":"IAMADMIN"}, {"ingloves" : 1})
+	var result = db.ingredients.find( {"_id": {"$in" : ingridientIDs["ingloves"]} 
+										} )
+	
+	
+	
+	
+	

@@ -1,0 +1,49 @@
+{% block content %}
+	<script src= {{ url_for('static', filename='js/searchapp.js') }}></script>
+
+	<!-- View for search app -->
+	<div ng-app = "searchApp" ng-controller = "searchController">
+		<form method="get" ng-submit="search()">
+			<input type="text" placeholder="Enter Food"  ng-model="food">
+			<select multiple ng-model="tags">
+				<option value="vegan">Vegan</option>
+				<option value="smelly">Smelly</option>
+				<option value="low-fat">Low Fat</option>
+				<option value="glutten-free">Glutten Free</option>
+				<option value="meat">Meat</option>
+				<option value="workingOut">Working Out</option>
+			</select>
+			<input class="btn btn-default" type="submit" value="Find">
+		</form>
+		<button name="surprise" ng-click="surpriseMe()">Surprise Me!</button>
+		<div ng-controller="searchController">
+		</div>
+
+		<div ng-model = "recommendations" ng-show="recommendations.length > 0">
+			<div class="page-header" >  <!-- Check if there are results then open -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h2 class="panel-title">Recommendations</h2>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr class="active"><th>Name</th><th>Description</th><th>Tags</th></tr>
+							</thead>
+							<tbody>  <!-- Sort through recommendations -->
+								<tr ng-repeat="recommendation in recommendations track by $index">
+									<td>{{recommendation.name | angular}}</td><td>{{recommendation.desc| angular}}</td>
+									<td><p ng-repeat = "tag in recommendation.tags"> {{tag | angular}}</p></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>		
+				</div>
+			</div>
+		</div>
+	
+	<p ng-show="searched && recommendations.length == 0"> Sorry can't find any suggestions! </p>
+		</div>
+
+	</div>
+{% endblock %}

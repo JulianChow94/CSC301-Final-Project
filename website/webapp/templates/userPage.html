@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/ionicons.min.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../static/js/ie10-viewport-bug-workaround.js"></script>
+</head>
+
+<body>
+<!-- NavBar -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header" style="margin-left:5px; width:100%;">
+            <a class="navbar-brand" href="/">Foogi</a>
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li class="active">
+                    {% if session['logged_in'] == True %}
+                        <a href="profile">{{username}}'s Profile</a>
+                    {% endif %}
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if session['logged_in'] == True %}
+                    <li><a href="logout">LOG OUT</a></li>
+                {% endif %}
+
+                {% if session['logged_in'] != True %}
+                    <li><a href="profile">LOG IN</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</nav>
+<div class="container">
+
+
+    <h3> Whats Up {{username}}? </h3>
+    <hr>
+
+    <!-- User Information Sidebar -->
+    <div class="col-sm-3">
+        <form action="/savetags" method="post">
+            <ul class="list-group">
+                <li class="list-group-item text-muted" contenteditable="false">Account Info</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span>
+                    {{username}}
+                </li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Email</strong></span>
+                    {{email}}
+                </li>
+                {% for tag in all_tags %}
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="">{{tag.name}}</strong></span>
+
+                    <input label={{tag.name}} type="checkbox" name="check" , value="{{tag._id}}" {% if tag.name in tags
+                           %} checked {% endif %}>
+
+                </li>
+                {% endfor %}
+            </ul>
+            <input type="submit" name="submit" value="Save Tags">
+            <input type="submit" name="submit" value="Log Out">
+            <input type="hidden" name="userid" value="{{username}}">
+
+        </form>
+    </div>
+
+    <div class="col-sm-9" contenteditable="false" style="">
+
+        <!-- User Details -->
+        <form action='' method='post'>
+            <table class='table'>
+                <thead>
+                <tr>
+                    <th>Favourites</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for fav in favourites %}
+                <tr>
+                    <th>{{fav.name}}</th>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+
+        <h2>CHECKED TAGS</h2>
+        {% for t in tags %}
+        <h1>{{t}}</h1>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

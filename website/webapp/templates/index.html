@@ -1,0 +1,179 @@
+{% extends 'layout.html' %}
+<head>
+    <title>Login Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/ionicons.min.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../static/js/ie10-viewport-bug-workaround.js"></script>
+
+</head>
+
+{% block content %}
+
+<!-- NavBar -->
+<nav class="navbar navbar-default" style="margin-bottom: -75px;">
+    <div class="container-fluid">
+        <div class="navbar-header" style="margin-left:5px; width:100%;">
+            <a class="navbar-brand" href="/">Foogi</a>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li>
+                    {% if session['logged_in'] == True %}
+                        <a href="profile">{{session['username']}}'s Profile</a>
+                    {% endif %}
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if session['logged_in'] == True %}
+                <li><a href="logout">LOG OUT</a></li>
+                {% endif %}
+
+                {% if session['logged_in'] != True %}
+                <li><a href="profile">LOG IN</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container ptb">
+    <center>
+        <form method="post" action="/">
+            <h2>Search for a Meal!</h2> <hr>
+	<center>
+            <p>What are you looking for?</p>
+	<input type ="radio" name="searchType" value="mealSub"> Substitute Meal
+            <input type ="radio" name="searchType" value="ingredientSub"> Substitute Ingredient
+            <input type ="radio" name="searchType" value="normal" checked="checked"> Give me a meal with...
+            <input name="food" type="text" placeholder="Enter Food">
+            <input class="btn btn-default" name="submit" type="submit" value="Find">
+            <input class="btn btn-default" name="submit" type="submit" value="Surprise Me!">
+			</center>
+	<br>
+	<p>Tags</p>
+	<label class="checkbox-inline"><input type="checkbox" name="tags" value="vegan">Vegan</label>
+	<label class="checkbox-inline"><input type="checkbox" name="tags" value="low-fat">Low Fat</label>
+	<label class="checkbox-inline"><input type="checkbox" name="tags" value="gluten-free">Gluten Free</label>
+	<label class="checkbox-inline"><input type="checkbox" name="tags" value="working-out">Working Out</label>
+	<label class="checkbox-inline"><input type="checkbox" name="tags" value="meat">Meat</label>
+        </form>
+        <div id ="menu-outer">
+ 
+			        {% if recommendations %}
+			        <div class="page-header">
+			            <div class="panel panel-default">
+			                <div class="panel-heading">
+			                    <h2 class="panel-title">Meal with searched item</h2>
+			                </div>
+			                <div class="table-responsive">
+			                
+			                	<script type="text/javascript">
+			     					$(document).ready(function() {
+			        					$("#resultTable1").tablesorter({
+				        					sortList: [ [3, 0] ],
+				        					headers: {
+				        						1 :{ sorter : false},
+				        						2 :{ sorter : false} 
+				        					},
+				        					
+				        					widgets : ['zebra']});
+				        				 });
+			    				</script>
+			    				
+			                    <table id="resultTable1" class="tablesorter">
+			                        <thead>
+			                        <tr >
+			                            <th>Name</th>
+			                            <th>Description</th>
+			                            <th>Tags</th>
+			                            <th># of Ingredient</th>
+			                            <th>Cooking time </th>
+			                        </tr>
+			                        </thead>
+			                        <tbody>  <!-- Sort through recommendations -->
+			                        {% for recommendation in recommendations %}
+			                        <tr>
+			                            <td><a href="/{{recommendation._id}}">{{recommendation.name}}</a></td>
+			                            <td>{{recommendation.desc}}</td>
+			                            <td>{% for tag in recommendation.tags %}<p> {{tag}}</p> {% endfor %}</td>
+			                            <td>{{recommendation.num_ingr}}</td>
+			                            <td>{{recommendation.time.total}}</td>
+			                        </tr>
+			                        {% endfor %}
+			                        </tbody>
+			                    </table>
+			                </div>
+			        
+			        {% elif food and not recommendations %}
+			        <p> Sorry can't find any suggestions for {{food}}! </p>
+			        {% endif %}
+			      
+	       </div>
+        
+        
+    	
+    </center>
+</div><!--/container-->
+
+<div id="h" style="margin-top: 0px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 centered">
+                <h1>Welcome to Foogi!<br/></h1> <br><br>
+
+                <h3 style="color: white; text-shadow: 1px 1px 1px black;">
+                    Foogi is perfect for people who are conscious of the health implications of the food they eat,
+                    but also desire food that tastes good when combined! <br> <br>
+
+                    Lots of dietary restrictions as well as variances in cooking ability? <br><strong>No Problem</strong>. <br>
+                    <br>
+                    Short on time or budget? <br><strong>We've got you covered</strong>. <br>
+                    <br>
+
+                    Up for something new? <br>
+                    <strong>Done.</strong>
+                <div class="mtb">
+                </div>
+                <!--/mt-->
+            </div>
+        </div>
+        <!--/row-->
+    </div>
+    <!--/container-->
+</div><!-- /H -->
+
+<div id="f">
+    <div class="container">
+        <div class="row centered">
+            <h2>Contact Us</h2>
+            <h5>bla@bla.com</h5>
+
+            <h6 class="mt">COPYRIGHT 2015 - Foogi</h6>
+        </div>
+        <!--/row-->
+    </div>
+    <!--/container-->
+</div><!--/F-->
+
+
+{% endblock %}
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/retina-1.1.0.js"></script>

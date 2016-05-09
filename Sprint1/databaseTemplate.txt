@@ -1,0 +1,35 @@
+Table: Users
+	>UserID (Unique incrementing key, INT)
+	>Username (Unique login username, STR)
+	>Password (MD5 hashed password, STR)
+	>DisplayName (STR)
+	>Email (STR)
+	>Favourites (A set of MealIDs, Array of INT)
+	>IngLoves (A set of IngredientIDs the user likes, Array of INT)
+	>IngHates (A set of IngredientIDs the user hates, Array of INT)
+	>Tags (A set of tagIDs the user wants enforced, i.e. Vegan, Array of INT)
+	
+Table: Meal
+	>MealID (Unique incrementing key, INT)
+	>Name (STR)
+	>Description (STR)
+	>Ingredients (A set of IngredientIDs this meal uses, Array of INT)
+	>Tags (A set of tagIDs this meal is included in, i.e. Vegan, Array of INT)
+	>Instructions (A url link to a page with cooking instructions/The instructions themselves, STR)
+	>Alternatives (A set of MealIDs that are healthy alternatives to this one, Array of INT)
+	
+Table: Ingredients
+	>IngredientID (Unique incrementing key, INT)
+	>Name (STR)
+	>Description (STR)
+	>Tags (A set of tagIDs this ingridient is included in, i.e. Vegan, Array of INT)
+	>Alternatives (A set of IngredientIDs that are healthy alternatives to this one, Array of INT)
+	>Nutrition (A set of INTs with the amount of each nutritional attribute of this ingridient per 100grams)
+		- Attributes are exactly: [Calories, FatSaturated, FatPolyunsaturated, FatMonounsaturated, Cholesterol,
+		Sodium, Potassium, CarbohydrateFiber, CarbohydrateSugar, Iron, Magnesium, VitaminA, VitaminB-6, VitaminB-12,
+		VitaminC,VitaminD]
+	
+Table: Tags
+	>TagID (Unique incrementing key, INT)
+	>Name (STR)
+	>Description (STR)

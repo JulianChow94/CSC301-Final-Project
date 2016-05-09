@@ -1,0 +1,121 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<!-- NavBar -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header" style="margin-left:5px; width:100%;">
+            <a class="navbar-brand" href="/">Foogi</a>
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li>
+                    {% if session['logged_in'] == True %}
+                        <a href="profile">{{session['username']}}'s Profile</a>
+                    {% endif %}
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if session['logged_in'] == True %}
+                <li><a href="logout">LOG OUT</a></li>
+                {% endif %}
+
+                {% if session['logged_in'] != True %}
+                <li><a href="profile">LOG IN</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+		
+		{% if foodType == 'ingredient' %}
+				
+			<center>
+			<div class="jumbotron">
+				<h1>{{food.name}}</h1>
+				<p>{{food.desc}}</p>
+			</div>
+			</center>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h3>Tags</h3>
+					{% for tag in food.tags %}
+						<p>{{tag}}</p>
+					{% endfor %}
+				</div>
+
+				<div class="col-sm-4">
+					<h3>Nutritional Value</h3>
+					{% for nutrient in food.nutrition %}
+						<p>{{nutrient}} : {{food.nutrition[nutrient]}}</p>
+					{% endfor %}
+				</div>
+				
+				<div class="col-sm-4">
+					<h3>Alternate Options</h3>
+					{% for alternate in food.alter %}
+						<p>{{alternate}}</p>
+					{% endfor %}
+				</div>
+			</div>
+			
+		
+		{% elif foodType == 'meal' %}
+			
+			<center>
+			<div class="jumbotron">
+				<h1>{{food.name}}</h1>
+				<p>{{food.desc}}</p>
+				<p>{{food.likedby}} people thought it was tasty! </p>
+				<p>Total Cook Time: {{food.time.total}} minutes</p>
+			</div>
+			
+			<dl>
+				<dt>Instructions</dt>
+					<dd>{{food.instructions}}</dd>
+			</dl>
+			</center>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h3>Ingredients</h3>
+					{% for ing in food.ingredients %}
+						<p>{{ing}}</p>
+					{% endfor %}
+				</div>
+			
+				<div class="col-sm-4">
+					<h3>Tags</h3>
+					{% for tag in food.tags %}
+						<p>{{tag}}</p>
+					{% endfor %}
+				</div>
+			
+				<div class="col-sm-4">
+					<h3>Alternate Options</h3>
+					{% for alternate in food.alter %}
+						<p>{{alternate}}</p>
+					{% endfor %}
+				</div>
+			
+			{% if user %}
+				<form method="post" action="/addLike">
+					<input hidden name="meal_id" value="{{food._id}}">
+					<input hidden name="user_id" value="{{user["_id"]}}">
+					{% if food._id in user.favourites %}
+						<input class="btn btn-default disabled" type="submit" value="Tasty!">
+					{% else %}
+						<input class="btn btn-default" type="submit" value="Tasty?">
+					{% endif %}
+				</form>
+			{% endif %}
+		{% endif %}
+</div>
+
+{% endblock %}
